@@ -74,12 +74,12 @@ curl -O https://downloads.dcos.io/dcos/EarlyAccess/commit/14509fe1e7899f439527fb
 cp /root/.ssh/id_rsa /dcos/genconf/ssh_key && chmod 0600 /dcos/genconf/ssh_key
 
 cat > /dcos/genconf/config.yaml << '__EOF__'
-
 ---
 agent_list:
 - agent ip
 bootstrap_url: 'file:///opt/dcos_install_tmp'
-cluster_name: cluster
+cluster_name: dcos
+exhibitor_storage_backend: static
 master_discovery: static
 master_list:
 - ip
