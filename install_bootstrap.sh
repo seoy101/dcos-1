@@ -4,6 +4,14 @@ yum install -y vim
 yum install -y net-tools
 yum install -y wget
 
+echo -e "\n" | ssh-keygen -t rsa -N ""
+
+wget http://apt.sw.be/redhat/el7/en/x86_64/rpmforge/RPMS/sshpass-1.05-1.el7.rf.x86_64.rpm
+
+rpm -Uvh sshpass-1.05-1.el7.rf.x86_64.rpm
+
+sshpass -p "123" ssh-copy-id -o StrictHostKeyChecking=no root@ip
+sshpass -p "123" ssh-copy-id -o StrictHostKeyChecking=no root@ip
 
 
 cat > /etc/yum.repos.d/docker.repo << '__EOF__'
@@ -88,3 +96,17 @@ echo $(ip addr show enp0s3 | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]
 EOF
 
 chmod 777 ip-detect config.yaml
+cp /root/.ssh/id_rsa /dcos/genconf/ssh_key && chmod 0600 /dcos/genconf/ssh_key
+
+
+bash dcos_generate_config.sh --genconf
+bash dcos_generate_config.sh --install-prereqs
+bash dcos_generate_config.sh --preflight
+bash dcos_generate_config.sh --deploy
+bash dcos_generate_config.sh --postflight
+
+
+
+
+
+
