@@ -53,3 +53,38 @@ sed -i '23s/$/server 3.asia.pool.ntp.org\n/' /etc/ntp.conf
 
 systemctl start ntpd
 systemctl enable ntpd
+
+
+mkdir /dcos
+chmod 777 /dcos
+mkdir -p /dcos/genconf
+cd /dcos
+curl -O https://downloads.dcos.io/dcos/EarlyAccess/commit/14509fe1e7899f439527fb39867194c7a425c771/dcos_generate_config.sh
+cd genconf
+
+cat > ./config.yaml << "EOF"
+---
+agent_list:
+- 192.168.1.34
+bootstrap_url: 'file:///opt/dcos_install_tmp'
+cluster_name: dcos
+exhibitor_storage_backend: static
+master_discovery: static
+master_list:
+- 192.168.1.75
+resolvers:
+- 8.8.4.4
+- 8.8.8.8
+ssh_key_path: /genconf/ssh_key
+ssh_port: 22
+ssh_user: root
+EOF
+
+cat > ./ip-detect << "EOF"
+#!/bin/bash
+set -o nounset -o errexit
+export PATH=/usr/sbin:/usr/bin:$PATH
+echo $(ip addr show enp0s3 | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | head -1)
+EOF
+
+chmod 777 ip-detect config.yaml
