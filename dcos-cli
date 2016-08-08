@@ -1,0 +1,13 @@
+#!/bin/sh
+
+apt-get install -y python-pip
+
+pip install vitrualenv
+
+mkdir dcos && cd dcos
+
+curl -O https://download.dcos.io/dcos-cli/install.sh
+
+bash install.sh . http://211.249.63.201
+
+dcos package install chronos
