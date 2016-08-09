@@ -63,10 +63,13 @@ wget http://apt.sw.be/redhat/el7/en/x86_64/rpmforge/RPMS/sshpass-1.05-1.el7.rf.x
 
 rpm -Uvh sshpass-1.05-1.el7.rf.x86_64.rpm
 
-for((i=3+$masterIpNum;i<$arrlen; i++)
+for((i=3+$masterIpNum;i<$arrlen; i++))
 do
-sshpass -p "{$array[1]}]" ssh-copy-id -o StrictHostKeyChecking=no root@{$array[$i]}
+sshpass -p "{$array[1]}" ssh-copy-id -o StrictHostKeyChecking=no root@{$array[$i]}
 done
+
+
+
 
 
 cat > /etc/yum.repos.d/docker.repo << '__EOF__'
@@ -126,6 +129,7 @@ curl -O https://downloads.dcos.io/dcos/EarlyAccess/commit/14509fe1e7899f439527fb
 cd genconf
 
 echo "---" >> config.yaml
+echo "agent_list:" >> config.yaml
 
 for(( i=3+$masterIpNum; i<$arrlen; i++))
 do
@@ -155,8 +159,8 @@ ssh_key_path: /genconf/ssh_key
 EOF
 
 echo "ssh_port: $portNum" >> config.yaml
-echo "ssh_user: root"
-echo "oauth_enabled: 'false'"
+echo "ssh_user: root" >> config.yaml
+echo "oauth_enabled: 'false'" >> config.yaml
 
 
 echo "#!/bin/bash" >> ip-detect
