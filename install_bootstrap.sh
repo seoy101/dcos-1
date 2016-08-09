@@ -172,9 +172,23 @@ echo "echo \$(ip addr show ${array[0]} | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]
 chmod 777 ip-detect config.yaml
 cp /root/.ssh/id_rsa /dcos/genconf/ssh_key && chmod 0600 /dcos/genconf/ssh_key
 
+cd /dcos/
+bash dcos_generate_config.sh --genconf
+bash dcos_generate_config.sh --install-prereqs
+bash dcos_generate_config.sh --preflight
+bash dcos_generate_config.sh --deploy
+bash dcos_generate_config.sh --postflight
 
-#bash dcos_generate_config.sh --genconf
-#bash dcos_generate_config.sh --install-prereqs
-#bash dcos_generate_config.sh --preflight
-#bash dcos_generate_config.sh --deploy
-#bash dcos_generate_config.sh --postflight
+rpm -Uvh https://dl.fedopraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+yum install python-pip
+
+pip install virtualenv
+
+mkdir dcosclidir && cd dcosclidir
+curl -O https://downloads.dcos.io/dcos-cli/install.sh
+bash install.sh . http://${array[3]}
+dcos auth login
+source /dcos/dcosclidir/bin/env-setup
+dcos package install chronos
+
+
