@@ -180,15 +180,16 @@ bash dcos_generate_config.sh --deploy
 bash dcos_generate_config.sh --postflight
 
 rpm -Uvh https://dl.fedopraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-yum install python-pip
+yum install -y python-pip
 
 pip install virtualenv
 
 mkdir dcosclidir && cd dcosclidir
 curl -O https://downloads.dcos.io/dcos-cli/install.sh
-bash install.sh . http://${array[3]}
+source /root/dcos/dcosclidir/bin/env-setup
 dcos auth login
-source /dcos/dcosclidir/bin/env-setup
+bash install.sh . http://${array[3]}
+
 dcos package install chronos
 
 
