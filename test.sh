@@ -61,12 +61,13 @@ wget http://apt.sw.be/redhat/el7/en/x86_64/rpmforge/RPMS/sshpass-1.05-1.el7.rf.x
 
 rpm -Uvh sshpass-1.05-1.el7.rf.x86_64.rpm
 
-for((i=3+$masterIpNum;i<$arrlen; i++))
+for((i=3;i<$arrlen; i++))
 do
-sshpass -p "{$array[1]}" ssh-copy-id -o StrictHostKeyChecking=no root@{$array[$i]}
+sshpass -p "${array[1]}" ssh-copy-id -o StrictHostKeyChecking=no root@${array[$i]}
 done
 
-
+echo ${array[1]}
+echo ${array[4]}
 
 
 
