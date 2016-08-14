@@ -48,10 +48,6 @@ done
 
 arrlen=${#array[@]}
 
-for(( i=3+$masterIpNum; i<$arrlen; i++))
-do
- echo ${array[$i]}
-done
 
 yum -y update
 yum install -y vim
@@ -183,6 +179,7 @@ bash dcos_generate_config.sh --preflight
 bash dcos_generate_config.sh --deploy
 bash dcos_generate_config.sh --postflight
 
+: << 'END'
 rpm -Uvh https://dl.fedopraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 yum install -y python-pip
 
@@ -195,5 +192,5 @@ dcos auth login
 bash install.sh . http://${array[3]}
 
 dcos package install chronos
-
+END
 
